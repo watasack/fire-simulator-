@@ -1,0 +1,21 @@
+# Streamlit デモアプリ
+streamlit>=1.32.0
+
+# データ処理
+pandas>=2.0.0
+numpy>=1.24.0
+
+# 可視化
+plotly>=5.18.0
+
+# 設定管理・バリデーション
+pydantic>=2.0
+
+# ユーティリティ
+pyyaml>=6.0
+python-dateutil>=2.8.0
+chardet>=5.0.0
+
+# シミュレーション・分析
+scipy>=1.11.0
+statsmodels>=0.14.0

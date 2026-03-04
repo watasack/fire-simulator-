@@ -1,0 +1,600 @@
+# FIRE Dashboard Configuration (デモアプリ用・匿名化済み)
+# このファイルはデモアプリ専用の設定です。
+# 個人情報は含まれておらず、一般的な共働き子育て世帯を想定した設定です。
+
+# データソース設定（デモでは未使用）
+data:
+  encoding: 'utf-8'
+  asset_file: 'data/資産推移月次.csv'
+  transaction_pattern: 'data/収入・支出詳細_*.csv'
+
+  income_forecast:
+    include_keywords:
+      - '給与'
+      - '給料'
+    exclude_keywords:
+      - '財形'
+      - '配当'
+      - 'ポイント'
+      - '還付'
+
+# シミュレーション設定
+simulation:
+  years: 50                    # シミュレーション期間（年）
+  start_age: 35                # 現在の年齢（デモアプリが上書き）
+  life_expectancy: 90          # 想定寿命
+
+  # 労働収入（デモアプリが shuhei_income=0, sakura_income=0 に上書きし monthly_income に委譲）
+  shuhei_income: 500000        # 夫の手取り月額（円）: 共働き世帯の一般的想定値
+  sakura_income: 400000        # 妻の手取り月額（円）: 共働き世帯の一般的想定値
+  initial_labor_income: 900000 # 世帯手取り合計
+
+  # FIRE後副収入（月額・円）
+  shuhei_post_fire_income: 100000   # 夫のFIRE後副収入
+  sakura_post_fire_income: 100000   # 妻のFIRE後副収入
+
+  # 産休・育休（デモアプリが [] に上書き）
+  maternity_leave:
+    - child: '子B'
+      months_before: 2
+      months_after: 12
+      monthly_income: 0
+
+  # 育休（デモアプリが [] に上書き）
+  shuhei_parental_leave:
+    - child: '子B'
+      months_after: 12
+      monthly_income: 310000
+      monthly_income_after_180days: 231000
+
+  # 時短勤務（デモアプリが [] に上書き）
+  shuhei_reduced_hours:
+    - child: '子B'
+      start_months_after: 12
+      end_months_after: 36
+      income_ratio: 0.75
+
+  # 標準シナリオ
+  standard:
+    annual_return_rate: 0.05   # 年率リターン 5%
+    inflation_rate: 0.02       # インフレ率 2%
+    income_growth_rate: 0.02   # 収入成長率 2%
+    expense_growth_rate: 0.02  # 支出成長率 2%
+    pension_growth_rate: 0.01  # 年金成長率 1%
+
+  # モンテカルロシミュレーション設定
+  monte_carlo:
+    enabled: true
+    iterations: 1000
+    return_std_dev: 0.06
+    mean_reversion_speed: 0.3
+    enhanced_model:
+      enabled: true
+      garch_omega: 0.000025
+      garch_alpha: 0.35
+      garch_beta: 0.60
+      volatility_floor: 0.008
+      volatility_ceiling: 0.040
+      mean_reversion_window: 12
+      mr_speed_crash: 0.08
+      mr_speed_normal: 0.15
+      mr_speed_bubble: 0.06
+      crash_threshold: -0.15
+      bubble_threshold: 0.15
+
+# FIRE設定
+fire:
+  expense_categories:
+    enabled: true  # デモアプリが false に上書き
+
+    definitions:
+      - id: food_home
+        name: '食費（自炊）'
+        discretionary: false
+        description: '家での食事、食材費、調味料'
+      - id: utilities_electricity
+        name: '光熱費（電気）'
+        discretionary: false
+        description: '電気代'
+      - id: utilities_gas
+        name: '光熱費（ガス）'
+        discretionary: false
+        description: 'ガス代'
+      - id: utilities_water
+        name: '光熱費（水道）'
+        discretionary: false
+        description: '上下水道代'
+      - id: communication_mobile
+        name: '通信費（携帯）'
+        discretionary: false
+        description: '携帯電話・スマートフォン'
+      - id: communication_internet
+        name: '通信費（インターネット）'
+        discretionary: false
+        description: '光回線・Wi-Fi'
+      - id: transport_commute
+        name: '交通費（定期券）'
+        discretionary: false
+        description: '通勤・通学定期券'
+      - id: insurance_life
+        name: '保険（生命）'
+        discretionary: false
+        description: '生命保険・医療保険'
+      - id: insurance_casualty
+        name: '保険（損害）'
+        discretionary: false
+        description: '火災保険・地震保険'
+      - id: medical
+        name: '医療費'
+        discretionary: false
+        description: '病院・薬代・健康診断'
+      - id: household_goods
+        name: '日用品'
+        discretionary: false
+        description: 'トイレットペーパー・洗剤等'
+      - id: food_out
+        name: '食費（外食）'
+        discretionary: true
+        description: '外食・デリバリー・テイクアウト'
+      - id: transport_other
+        name: '交通費（その他）'
+        discretionary: true
+        description: 'レジャー時の交通費・タクシー等'
+      - id: clothing
+        name: '被服費'
+        discretionary: true
+        description: '衣類・靴・バッグ等'
+      - id: entertainment_movies
+        name: '娯楽（映画/コンサート）'
+        discretionary: true
+        description: '映画・コンサート・演劇'
+      - id: entertainment_other
+        name: '娯楽（その他）'
+        discretionary: true
+        description: 'カラオケ・ゲーム・アミューズメント'
+      - id: travel
+        name: '旅行'
+        discretionary: true
+        description: '国内旅行・海外旅行・帰省'
+      - id: hobby
+        name: '趣味'
+        discretionary: true
+        description: '趣味用品・写真・音楽・スポーツ用品'
+      - id: education_books
+        name: '教養（書籍）'
+        discretionary: true
+        description: '書籍・雑誌・新聞'
+      - id: education_courses
+        name: '教養（講座）'
+        discretionary: true
+        description: 'オンライン講座・資格取得・習い事'
+      - id: beauty
+        name: '美容・理容'
+        discretionary: true
+        description: '美容院・理容院・化粧品'
+      - id: other
+        name: 'その他'
+        discretionary: true
+        description: '上記に分類されない支出'
+
+    # ライフステージ別予算（デモアプリが manual_annual_expense で全ステージ上書き）
+    budgets_by_stage:
+      young_child:
+        food_home: 780000
+        utilities_electricity: 96000
+        utilities_gas: 50000
+        utilities_water: 43000
+        communication_mobile: 46000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 0
+        insurance_casualty: 60000
+        medical: 60000
+        household_goods: 300000
+        food_out: 280000
+        transport_other: 240000
+        clothing: 110000
+        entertainment_movies: 20000
+        entertainment_other: 20000
+        travel: 250000
+        hobby: 40000
+        education_books: 20000
+        education_courses: 120000
+        beauty: 30000
+        other: 53000
+
+      elementary:
+        food_home: 858000
+        utilities_electricity: 108000
+        utilities_gas: 55000
+        utilities_water: 47000
+        communication_mobile: 46000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 0
+        insurance_casualty: 60000
+        medical: 60000
+        household_goods: 264000
+        food_out: 280000
+        transport_other: 240000
+        clothing: 110000
+        entertainment_movies: 27000
+        entertainment_other: 24000
+        travel: 300000
+        hobby: 50000
+        education_books: 30000
+        education_courses: 180000
+        beauty: 45000
+        other: 100000
+
+      junior_high:
+        food_home: 936000
+        utilities_electricity: 120000
+        utilities_gas: 60000
+        utilities_water: 52000
+        communication_mobile: 55000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 0
+        insurance_casualty: 60000
+        medical: 60000
+        household_goods: 264000
+        food_out: 280000
+        transport_other: 300000
+        clothing: 110000
+        entertainment_movies: 33000
+        entertainment_other: 28000
+        travel: 300000
+        hobby: 60000
+        education_books: 30000
+        education_courses: 180000
+        beauty: 45000
+        other: 120000
+
+      high_school:
+        food_home: 936000
+        utilities_electricity: 120000
+        utilities_gas: 60000
+        utilities_water: 52000
+        communication_mobile: 55000
+        communication_internet: 57000
+        transport_commute: 120000
+        insurance_life: 0
+        insurance_casualty: 60000
+        medical: 60000
+        household_goods: 267000
+        food_out: 280000
+        transport_other: 300000
+        clothing: 131000
+        entertainment_movies: 37000
+        entertainment_other: 33000
+        travel: 300000
+        hobby: 83000
+        education_books: 28000
+        education_courses: 165000
+        beauty: 41000
+        other: 150000
+
+      university:
+        food_home: 936000
+        utilities_electricity: 120000
+        utilities_gas: 60000
+        utilities_water: 52000
+        communication_mobile: 55000
+        communication_internet: 57000
+        transport_commute: 240000
+        insurance_life: 0
+        insurance_casualty: 60000
+        medical: 60000
+        household_goods: 223000
+        food_out: 280000
+        transport_other: 240000
+        clothing: 138000
+        entertainment_movies: 38000
+        entertainment_other: 34000
+        travel: 300000
+        hobby: 85000
+        education_books: 28000
+        education_courses: 170000
+        beauty: 43000
+        other: 150000
+
+      empty_nest:
+        food_home: 624000
+        utilities_electricity: 120000
+        utilities_gas: 55000
+        utilities_water: 34000
+        communication_mobile: 37000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 120000
+        insurance_casualty: 60000
+        medical: 180000
+        household_goods: 183000
+        food_out: 185000
+        transport_other: 168000
+        clothing: 104000
+        entertainment_movies: 24000
+        entertainment_other: 24000
+        travel: 180000
+        hobby: 48000
+        education_books: 30000
+        education_courses: 60000
+        beauty: 36000
+        other: 252000
+
+      empty_nest_active:
+        food_home: 624000
+        utilities_electricity: 120000
+        utilities_gas: 55000
+        utilities_water: 34000
+        communication_mobile: 37000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 120000
+        insurance_casualty: 60000
+        medical: 180000
+        household_goods: 183000
+        food_out: 185000
+        transport_other: 168000
+        clothing: 104000
+        entertainment_movies: 24000
+        entertainment_other: 24000
+        travel: 180000
+        hobby: 48000
+        education_books: 30000
+        education_courses: 60000
+        beauty: 36000
+        other: 252000
+
+      empty_nest_senior:
+        food_home: 580000
+        utilities_electricity: 120000
+        utilities_gas: 55000
+        utilities_water: 34000
+        communication_mobile: 37000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 60000
+        insurance_casualty: 60000
+        medical: 204000
+        household_goods: 160000
+        food_out: 150000
+        transport_other: 120000
+        clothing: 70000
+        entertainment_movies: 18000
+        entertainment_other: 18000
+        travel: 150000
+        hobby: 40000
+        education_books: 24000
+        education_courses: 36000
+        beauty: 30000
+        other: 220000
+
+      empty_nest_elderly:
+        food_home: 520000
+        utilities_electricity: 120000
+        utilities_gas: 55000
+        utilities_water: 34000
+        communication_mobile: 37000
+        communication_internet: 57000
+        transport_commute: 0
+        insurance_life: 0
+        insurance_casualty: 60000
+        medical: 300000
+        household_goods: 140000
+        food_out: 120000
+        transport_other: 60000
+        clothing: 40000
+        entertainment_movies: 8000
+        entertainment_other: 8000
+        travel: 72000
+        hobby: 36000
+        education_books: 18000
+        education_courses: 18000
+        beauty: 18000
+        other: 210000
+
+  # ライフステージ別合計（デモアプリが全ステージ上書き）
+  base_expense_by_stage:
+    young_child: 2675000
+    elementary: 2941000
+    junior_high: 3150000
+    high_school: 3335000
+    university: 3369000
+    empty_nest: 2581000
+    empty_nest_active: 2581000
+    empty_nest_senior: 2243000
+    empty_nest_elderly: 1931000
+
+  discretionary_ratio_by_stage:
+    young_child: 0.44
+    elementary: 0.47
+    junior_high: 0.47
+    high_school: 0.46
+    university: 0.45
+    empty_nest: 0.43
+    empty_nest_active: 0.43
+    empty_nest_senior: 0.39
+    empty_nest_elderly: 0.31
+
+  empty_nest_sub_stages:
+    senior_from_age: 70
+    elderly_from_age: 80
+
+  dynamic_expense_reduction:
+    enabled: true
+    surplus_spending_rate: 0.40
+    max_cut_ratio: 0.7
+    max_boost_ratio: 5.0
+
+  additional_child_expense_by_stage:
+    young_child: 500000
+    elementary:  400000
+    junior_high: 450000
+    high_school: 450000
+    university:  600000
+    empty_nest:       0
+
+  # 最適化結果（デモアプリが null に上書き）
+  optimal_fire_month: null
+  optimal_extra_monthly_budget: 0
+
+  manual_annual_expense: null  # デモアプリが上書き
+
+# 教育費設定
+education:
+  enabled: true
+
+  children:
+    - name: '子A'
+      birthdate: '2022/04/01'
+      nursery: 'standard'
+      kindergarten: 'private'
+      elementary: 'public'
+      junior_high: 'public'
+      high: 'public'
+      university: 'national'
+    - name: '子B'
+      birthdate: '2027/04/01'
+      nursery: 'standard'
+      kindergarten: 'private'
+      elementary: 'public'
+      junior_high: 'public'
+      high: 'public'
+      university: 'national'
+
+  costs:
+    nursery:
+      standard: 714000
+
+    kindergarten:
+      public: 100000
+      private: 200000
+
+    elementary:
+      public: 320000
+      private: 1600000
+
+    junior_high:
+      public: 490000
+      private: 1400000
+
+    high:
+      public: 460000
+      private: 1000000
+
+    university:
+      national: 540000
+      private_arts: 900000
+      private_science: 1200000
+
+# 児童手当設定
+child_allowance:
+  enabled: true
+  first_child_under_3: 15000
+  second_child_plus_under_3: 20000
+  age_3_to_high_school: 10000
+
+# 住宅ローン設定（一般的な想定値）
+mortgage:
+  enabled: true
+  monthly_payment: 100000      # 一般的な住宅ローン月額（円）
+  end_date: '2060/12/31'       # 35年ローン想定
+
+# 住宅メンテナンス費用設定
+house_maintenance:
+  enabled: true
+  items:
+    - name: '白アリ対策'
+      cost: 150000
+      frequency_years: 10
+      first_year: 2035
+    - name: '外壁補修'
+      cost: 3000000
+      frequency_years: 30
+      first_year: 2055
+
+# 年金設定（一般的なサラリーマン世帯の想定値）
+pension:
+  enabled: true
+  start_age: 65
+
+  people:
+    - name: '夫'
+      birthdate: '1990/01/01'
+      pension_type: 'employee'
+      work_start_age: 22
+      avg_monthly_salary: 500000       # 標準報酬月額（円）
+      past_pension_base_annual: 150000 # 老齢厚生年金実績額（円/年）
+      past_contribution_months: 160    # これまでの加入月数
+      override_start_age: 70
+    - name: '妻'
+      birthdate: '1991/01/01'
+      pension_type: 'national'
+      override_start_age: 65
+
+# 社会保険料設定
+social_insurance:
+  enabled: true
+  national_pension_monthly_premium: 16980
+  health_insurance_income_rate: 0.11
+  health_insurance_per_person: 50000
+  health_insurance_per_household: 30000
+  health_insurance_members: 2
+  health_insurance_basic_deduction: 430000
+  health_insurance_max_premium: 1060000
+
+# ワーケーション費用設定
+workation:
+  enabled: true
+  start_child_index: 1
+  start_child_age: 18
+  annual_cost: 0
+
+# 資産配分設定
+asset_allocation:
+  enabled: true
+  cash_buffer_months: 6
+  auto_invest_threshold: 1.5
+  nisa_enabled: true
+  nisa_annual_limit: 3600000
+  invest_beyond_nisa: true
+  min_cash_balance: 5000000
+  capital_gains_tax_rate: 0.20315
+
+# FIRE後の現金管理戦略
+post_fire_cash_strategy:
+  enabled: true
+  safety_margin: 1000000
+  target_cash_reserve: 3000000
+  monthly_buffer_months: 1
+  market_crash_threshold: -0.2
+  recovery_threshold: -0.15
+  emergency_cash_floor: 100000
+
+# 年金繰り下げ受給戦略
+pension_deferral:
+  enabled: true
+  defer_to_70_threshold: 1.50
+  defer_to_68_threshold: 1.20
+  early_at_62_threshold: 0.50
+  deferral_increase_rate: 0.084
+  early_decrease_rate: 0.048
+  min_start_age: 62
+  max_start_age: 75
+
+# 最適化設定
+optimization:
+  pre_pension_reduction_rate: 0.3
+  min_asset_floor: 3_000_000
+  austerity_years_before_pension: 10
+  pre_pension_reduction_candidates: [0, 0.10, 0.20, 0.30]
+
+# 可視化設定
+visualization:
+  font_family: "'Segoe UI', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo', sans-serif"
+
+# 出力設定
+output:
+  html_file: 'dashboard/index.html'

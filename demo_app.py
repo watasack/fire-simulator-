@@ -24,7 +24,7 @@ from src.simulator import simulate_future_assets
 # ページ設定
 # -------------------------------------------------------------------
 st.set_page_config(
-    page_title="FIREシミュレーター（無料デモ）",
+    page_title="共働き・子育て世帯のFIREシミュレーター（無料デモ）",
     page_icon="🔥",
     layout="centered",
 )
@@ -32,12 +32,12 @@ st.set_page_config(
 # -------------------------------------------------------------------
 # ヘッダー
 # -------------------------------------------------------------------
-st.title("🔥 FIREシミュレーター（無料デモ）")
+st.title("🔥 共働き・子育て世帯のFIREシミュレーター")
 st.caption("入力データはサーバーに保存されません。ブラウザ内のみで計算します。")
 
 st.markdown("""
-**FIRE（経済的自立・早期退職）**の到達年齢を計算します。
-3項目を入力するだけで、推計FIRE到達年齢がわかります。
+**共働き・子育て世帯**向けのFIREシミュレーターです。
+年収・支出・資産を入力するだけで、推計FIRE到達年齢がわかります。
 """)
 
 st.divider()
@@ -257,6 +257,18 @@ if calc_button:
             url="https://gumroad.com/",  # TODO: 実際のGumroad URLに差し替え
             use_container_width=False,
         )
+
+    st.divider()
+
+    # メール登録（補助導線）
+    st.subheader("📧 育休・共働きシナリオの使い方ガイドを無料で受け取る")
+    st.caption("育休12ヶ月・時短勤務など共働き世帯向けの設定例をメールでお送りします。購入前の参考にどうぞ。")
+    # TODO: Googleフォーム作成後にURLを差し替え
+    st.link_button(
+        "無料ガイドを受け取る（メール登録）",
+        url="https://forms.gle/",  # TODO: Google Form URL に差し替え
+        use_container_width=False,
+    )
 
 # -------------------------------------------------------------------
 # フッター

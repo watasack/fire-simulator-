@@ -285,7 +285,7 @@ if calc_button:
         # Gumroad URL は後で差し替え
         st.link_button(
             "🛒 フル版を購入する（¥3,000）",
-            url="https://gumroad.com/",  # TODO: 実際のGumroad URLに差し替え
+            url="https://firewithkids.gumroad.com/l/okjjyz",
             use_container_width=False,
         )
 

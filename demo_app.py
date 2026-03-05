@@ -297,7 +297,7 @@ if calc_button:
     # TODO: Googleフォーム作成後にURLを差し替え
     st.link_button(
         "無料ガイドを受け取る（メール登録）",
-        url="https://forms.gle/",  # TODO: Google Form URL に差し替え
+        url="https://forms.gle/mqrmGXNzy73Q1qb67",
         use_container_width=False,
     )
 

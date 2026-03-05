@@ -59,6 +59,15 @@ with col1:
         step=1,
         help="税・社保引き後の手取り額。",
     )
+    age_husband = st.number_input(
+        "夫の現在年齢（歳）",
+        min_value=20,
+        max_value=65,
+        value=35,
+        step=1,
+    )
+
+with col2:
     income_wife = st.number_input(
         "妻の月手取り収入（万円）",
         min_value=0,
@@ -67,10 +76,20 @@ with col1:
         step=1,
         help="税・社保引き後の手取り額。",
     )
-    total_income = income_husband + income_wife
-    st.caption(f"世帯月手取り合計: **{total_income} 万円**（年収 {total_income * 12} 万円）")
+    age_wife = st.number_input(
+        "妻の現在年齢（歳）",
+        min_value=20,
+        max_value=65,
+        value=33,
+        step=1,
+    )
 
-with col2:
+total_income = income_husband + income_wife
+current_age = age_husband
+st.caption(f"世帯月手取り合計: **{total_income} 万円**（年収 {total_income * 12} 万円）")
+
+col3, col4 = st.columns(2)
+with col3:
     monthly_expense_man = st.number_input(
         "月間支出（万円）",
         min_value=5,
@@ -79,6 +98,7 @@ with col2:
         step=1,
         help="生活費・住宅ローン・保険・教育費等の合計。",
     )
+with col4:
     current_assets_man = st.number_input(
         "現在の金融資産（万円）",
         min_value=0,
@@ -87,15 +107,6 @@ with col2:
         step=50,
         help="現金・預金・投資信託・株式の合計。不動産は除く。",
     )
-
-current_age = st.number_input(
-    "現在の年齢（歳）",
-    min_value=20,
-    max_value=65,
-    value=35,
-    step=1,
-    help="シミュレーション開始年齢（夫の年齢）。",
-)
 
 st.divider()
 
